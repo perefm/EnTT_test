@@ -7,8 +7,15 @@ static void doMath(const glm::mat4& transform)
 
 }
 
+// Called each time a Transform is created
+static void OnTransformConstruct(entt::registry& registry, entt::entity entity)
+{
+	printf("Transform created!!!");
+}
+
 Scene::Scene()
 {
+
 
 	struct MeshComponent
 	{
@@ -40,9 +47,13 @@ Scene::Scene()
 
 	entt::entity entity = m_Registry.create(); // similar to "uint32_t entity = m_Registry.create();", entity is a uint32_t
 
+	m_Registry.on_construct<TransformComponent>().connect<&OnTransformConstruct>();
+
 	// add component
 	auto& transform = m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.0f));
 	transform = glm::mat4(0.0f); // We can access directly the entity
+
+	
 
 	// Get compoennet
 	if (m_Registry.has<TransformComponent>(entity)) {
