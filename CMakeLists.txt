@@ -27,14 +27,16 @@ file(GLOB_RECURSE HEADER_FILES ${CMAKE_SOURCE_DIR}/src/*.h ${CMAKE_SOURCE_DIR}/s
 file(GLOB_RECURSE RESOURCE_FILES ${CMAKE_SOURCE_DIR}/res/*.rc)
 
 # Dependencies
+find_package(glm CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
-#find_package(EnTT REQUIRED)
+
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
 if(MSVC)
 	set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 endif()
 
+target_link_libraries(${PROJECT_NAME} PRIVATE glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE EnTT::EnTT)
 
 message($CMAKE_BUILD_TYPE)

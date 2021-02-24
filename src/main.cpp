@@ -1,4 +1,5 @@
 #include <entt/entt.hpp>
+#include "Scene.h"
  
 struct position {
     float x;
@@ -41,4 +42,7 @@ int main() {
     }
  
     update(registry);
+
+    Scene* my_Scene = new Scene();
+
 }
