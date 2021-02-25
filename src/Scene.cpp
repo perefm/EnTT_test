@@ -1,6 +1,7 @@
 #include "Scene.h"
 
 #include <glm/glm.hpp>
+#include "Components.h"
 
 static void doMath(const glm::mat4& transform)
 {
@@ -15,65 +16,38 @@ static void OnTransformConstruct(entt::registry& registry, entt::entity entity)
 
 Scene::Scene()
 {
-
-
-	struct MeshComponent
-	{
-		std::string Path;
-		MeshComponent() = default;
-		MeshComponent(const MeshComponent&) = default;
-		MeshComponent(const std::string path)
-			: Path(path) {};
-
-		operator std::string () { return Path; };
-		operator const std::string() const { return Path; };
-	};
-
-	struct TransformComponent
-	{
-		glm::mat4 Transform;
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent&) = default;
-		TransformComponent(const glm::mat4& transform)
-			: Transform(transform) {};
-
-		operator glm::mat4& () { return Transform; };
-		operator const glm::mat4& () const { return Transform; };
-	};
-
-
-	//TransformComponent transform;
+	//TransformMat4Component transform;
 	//doMath(transform);
 
 	entt::entity entity = m_Registry.create(); // similar to "uint32_t entity = m_Registry.create();", entity is a uint32_t
 
-	m_Registry.on_construct<TransformComponent>().connect<&OnTransformConstruct>();
+	m_Registry.on_construct<TransformMat4Component>().connect<&OnTransformConstruct>();
 
 	// add component
-	auto& transform = m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.0f));
+	auto& transform = m_Registry.emplace<TransformMat4Component>(entity, glm::mat4(1.0f));
 	transform = glm::mat4(0.0f); // We can access directly the entity
 
 	
 
 	// Get compoennet
-	if (m_Registry.has<TransformComponent>(entity)) {
-		TransformComponent& my_trans = m_Registry.get<TransformComponent>(entity);
+	if (m_Registry.has<TransformMat4Component>(entity)) {
+		TransformMat4Component& my_trans = m_Registry.get<TransformMat4Component>(entity);
 		my_trans = glm::mat4(1.0f);
 	}
 	
 	// Iterate between components
-	auto view = m_Registry.view<TransformComponent>();
+	auto view = m_Registry.view<TransformMat4Component>();
 	for (auto entity : view)
 	{
-		//TransformComponent& transform = view.get<TransformComponent>(entity); // Probably more optimal?? to check
-		TransformComponent& transform = m_Registry.get<TransformComponent>(entity);
+		//TransformMat4Component& transform = view.get<TransformMat4Component>(entity); // Probably more optimal?? to check
+		TransformMat4Component& transform = m_Registry.get<TransformMat4Component>(entity);
 	}
 
 	// Group multiple components
-	auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
+	auto group = m_Registry.group<TransformMat4Component>(entt::get<MeshComponent>);
 	for (auto entity : group)
 	{
-		auto&[transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
+		auto&[transform, mesh] = group.get<TransformMat4Component, MeshComponent>(entity);
 		transform.Transform;// and now... access the components
 		mesh.Path;
 
