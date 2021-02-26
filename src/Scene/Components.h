@@ -6,6 +6,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
+#include "Renderer/Camera.h"
+
 namespace Phoenix {
 
 	struct TagComponent
@@ -54,6 +56,16 @@ namespace Phoenix {
 		}
 	};
 
+	struct CameraComponent
+	{
+		Phoenix::Camera Camera;
+		bool Primary = true;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+	};
+
+	/*
 	struct TransformMat4Component
 	{
 		glm::mat4 Transform = glm::mat4(1.0f);
@@ -67,4 +79,5 @@ namespace Phoenix {
 		operator const glm::mat4& () const { return Transform; };
 
 	};
+	*/
 }
