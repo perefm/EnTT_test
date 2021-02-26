@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Scene.h"
+#include "Entity.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
@@ -65,9 +66,14 @@ namespace Phoenix {
 	{
 	}
 
-	entt::entity Scene::createEntity()
+	Entity Scene::createEntity(const std::string& name)
 	{
-		return m_Registry.create();
+		Entity entity = { m_Registry.create(), this };
+		// All our entities will have those default components
+		entity.AddComponent<TransformComponent>();
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = name.empty() ? "No name" : name; // Set default name if tag is empty
+		return entity;
 	}
 
 	void Scene::OnUpdate(float timestep) // Should be a double?

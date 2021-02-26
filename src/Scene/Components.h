@@ -10,14 +10,14 @@ namespace Phoenix {
 
 	struct TagComponent
 	{
-		std::string Name;
+		std::string Tag;
 		TagComponent() = default;
 		TagComponent(const TagComponent&) = default;
-		TagComponent(const std::string name)
-			: Name(name) {};
+		TagComponent(const std::string& tag)
+			: Tag(tag) {};
 
-		operator std::string() { return Name; };
-		operator const std::string() const { return Name; };
+		operator std::string() { return Tag; };
+		operator const std::string() const { return Tag; };
 	};
 
 	struct MeshComponent
