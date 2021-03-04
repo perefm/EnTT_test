@@ -5,7 +5,6 @@
 
 #pragma once
 
-#include "Camera.h"
 #include <iostream>
 #include <string>
 #include <glm/glm.hpp>
