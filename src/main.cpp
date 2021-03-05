@@ -7,7 +7,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Components.h"
 
- 
+#include "Sections/RenderScene.h"
 
 using namespace Phoenix;
 
@@ -18,34 +18,26 @@ int main() {
 	char c;
 	std::cout << "Press ESC to exit!" << std::endl;
 
-	Ref<Scene> m_ActiveScene = CreateRef<Scene>();
+	// Create the RenderScene "section"
+	Ref<RenderScene> m_SectionRenderScene = CreateRef<RenderScene>();
+	m_SectionRenderScene->onLoad();	// Load the section
+	m_SectionRenderScene->onInit();	// Init the section
 
-	// Create Model Entity
-	auto modelA = m_ActiveScene->createEntity("Model A");
-	// Add some components to entity "modelA"
-	modelA.AddComponent<MeshComponent>("Path to mesh....");
-	Entity& my_entity = modelA;
-
-
-	// Create Camera Entity
-	auto camera = m_ActiveScene->createEntity("Camera");
-	camera.AddComponent<CameraComponent>();
-
-
-
+	
 	while (true)
 	{
-		m_ActiveScene->OnUpdate(time);
 		c = _getch();
+		
 		if (c == 27)
 			break;
-
-		// On each loop, we increment the X position of the translation component of ModelA
-		my_entity.GetComponent<TransformComponent>().Translation +=glm::vec3(1.0f, 0.0f, 0.0f);
-		//m_ActiveScene->Reg().get<TransformComponent>(modelA).Translation += glm::vec3(1.0f, 0.0f, 0.0f);
-
-		time += 0.1f;
-		std::cout << "new frame! time:" + std::to_string(time) << std::endl;
+		else if (c == 'e') {
+			m_SectionRenderScene->ShowEntities();
+		}
+		else {
+			m_SectionRenderScene->onExec(time);
+			time += 0.1f;
+		}
+		
 	}
 
 	std::cout << "Exit!" << std::endl;

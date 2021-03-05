@@ -5,6 +5,7 @@
 namespace Phoenix {
 
 	class Entity;
+	class RenderScene;
 
 	class Scene {
 
@@ -19,6 +20,7 @@ namespace Phoenix {
 		entt::registry m_Registry;	// contain component data and entitiy ID
 
 		friend class Entity;
+		friend class RenderScene;
 	};
 
 }

@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
 #include "Components.h"
+#include "Renderer/Renderer.h"
 
 namespace Phoenix {
 
@@ -41,6 +42,9 @@ namespace Phoenix {
 
 	void Scene::OnUpdate(float timestep) // Should be a double?
 	{
+		// Update scripts
+		// TODO: Implement scripting
+
 		// Render the scene
 		// Find the main camera
 		Camera* mainCamera = nullptr;
@@ -62,7 +66,7 @@ namespace Phoenix {
 		
 		if (mainCamera)
 		{
-			// Renderer::BeginScene(mainCamera->GetProjection(), *cameraTransform);	// Start our renderer by sending the camera projection and transform matrix
+			Renderer::BeginScene(*mainCamera);	// Start our renderer by sending the camera projection and transform matrix
 
 			// Group multiple components
 			auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
@@ -74,7 +78,7 @@ namespace Phoenix {
 				// Renderer::Submit(mesh, transform); // Example for a renderer
 			}
 
-			// Renderer::EndScene();		// Calls the renderer end
+			Renderer::EndScene();
 		}
 
 		

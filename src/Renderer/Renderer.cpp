@@ -2,7 +2,7 @@
 // Spontz Demogroup
 
 #include <glm/glm.hpp>
-#include "Renderer.h"
+#include "Renderer/Renderer.h"
 
 namespace Phoenix {
 	Scope<Renderer::SceneData> Renderer::s_SceneData = CreateScope<Renderer::SceneData>();
