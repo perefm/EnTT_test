@@ -5,6 +5,8 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #include "Components.h"
 #include "Renderer/Renderer.h"
 
@@ -48,7 +50,7 @@ namespace Phoenix {
 		// Render the scene
 		// Find the main camera
 		Camera* mainCamera = nullptr;
-		glm::mat4* cameraTransform = nullptr;
+		glm::mat4 cameraTransform;
 		{
 			auto view = m_Registry.view<TransformComponent, CameraComponent>();
 			for (auto entity : view)
@@ -57,7 +59,7 @@ namespace Phoenix {
 				if (camera.Primary)
 				{
 					mainCamera = &camera.Camera;
-					cameraTransform = &transform.GetTransform();
+					cameraTransform = transform.GetTransform();
 					break;
 				}
 			}
@@ -72,7 +74,7 @@ namespace Phoenix {
 			auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
 			for (auto entity : group)
 			{
-				auto& [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
+				auto [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
 
 				std::cout << "Call Render with mesh: " + mesh.Path + " at position: " + glm::to_string(transform.GetTransform()) << std::endl; // and now... access the components
 				// Renderer::Submit(mesh, transform); // Example for a renderer
