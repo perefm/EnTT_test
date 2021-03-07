@@ -30,6 +30,7 @@ file(GLOB_RECURSE RESOURCE_FILES ${CMAKE_SOURCE_DIR}/res/*.rc)
 # Dependencies
 find_package(glm CONFIG REQUIRED)
 find_package(EnTT CONFIG REQUIRED)
+find_package(yaml-cpp CONFIG REQUIRED)
 
 
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
@@ -39,6 +40,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PRIVATE glm)
 target_link_libraries(${PROJECT_NAME} PRIVATE EnTT::EnTT)
+target_link_libraries(${PROJECT_NAME} PRIVATE yaml-cpp)
 
 message($CMAKE_BUILD_TYPE)
 

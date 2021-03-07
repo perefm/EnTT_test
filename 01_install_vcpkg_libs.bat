@@ -6,5 +6,5 @@ git checkout f9763b717eba12be38ea750406fe2a22a7ff00f6
 powershell "dir *.ps* -recurse | Set-AuthenticodeSignature -Certificate (dir cert:\currentuser\my -code)"
 call bootstrap-vcpkg.bat
 rem vcpkg integrate install
-vcpkg install --recurse glm entt --triplet x64-windows-static
+vcpkg install --recurse glm entt yaml-cpp --triplet x64-windows-static
 cd..
