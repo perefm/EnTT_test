@@ -20,6 +20,8 @@ namespace Phoenix {
 		void		onEnd();
 
 		void		ShowEntities();
+		void		LoadScene(std::string path);
+		void		SaveScene(std::string path);
 
 	private:
 		void		ShowComponents(Entity entity);

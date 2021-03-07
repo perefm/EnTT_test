@@ -7,6 +7,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Entity.h"
 #include "Scene/Components.h"
+#include "Scene/SceneSerializer.h"
 #include "Sections/RenderScene.h"
 
 namespace Phoenix {
@@ -67,6 +68,19 @@ namespace Phoenix {
 		});
 
 		std::cout << std::endl;
+	}
+
+	void RenderScene::LoadScene(std::string path)
+	{
+		m_activeScene = CreateRef<Scene>();
+		SceneSerializer serializer(m_activeScene);
+		serializer.Deserialize(path);
+	}
+
+	void RenderScene::SaveScene(std::string path)
+	{
+		SceneSerializer serializer(m_activeScene);
+		serializer.Serialize(path);
 	}
 	
 

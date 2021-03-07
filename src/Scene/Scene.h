@@ -6,6 +6,7 @@ namespace Phoenix {
 
 	class Entity;
 	class RenderScene;
+	class SceneSerializer;
 
 	class Scene {
 
@@ -21,6 +22,7 @@ namespace Phoenix {
 
 		friend class Entity;
 		friend class RenderScene;
+		friend class SceneSerializer;
 	};
 
 }

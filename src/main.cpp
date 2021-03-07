@@ -8,6 +8,7 @@
 #include "Scene/Components.h"
 
 #include "Sections/RenderScene.h"
+#include "main.h"
 
 using namespace Phoenix;
 
@@ -32,6 +33,14 @@ int main() {
 			break;
 		else if (c == 'e') {
 			m_SectionRenderScene->ShowEntities();
+		}
+		else if (c == 'l') {
+			// Load scene
+			m_SectionRenderScene->LoadScene(".//scene.phoenix");
+		}
+		else if (c == 's') {
+			// Save scene
+			m_SectionRenderScene->SaveScene(".//scene.phoenix");
 		}
 		else {
 			m_SectionRenderScene->onExec(time);
