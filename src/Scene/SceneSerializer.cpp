@@ -137,7 +137,9 @@ namespace Phoenix {
 			out << YAML::Key << "MovementSpeed" << YAML::Value << camera.MovementSpeed;
 			out << YAML::Key << "RollSpeed" << YAML::Value << camera.RollSpeed;
 			out << YAML::Key << "MouseSensitivity" << YAML::Value << camera.MouseSensitivity;
-			out << YAML::Key << "Zoom" << YAML::Value << camera.Zoom;
+			out << YAML::Key << "Fov" << YAML::Value << camera.Fov;
+			out << YAML::Key << "Far" << YAML::Value << camera.Far;
+			out << YAML::Key << "Near" << YAML::Value << camera.Near;
 
 			out << YAML::EndMap; // Camera
 
@@ -240,7 +242,9 @@ namespace Phoenix {
 					cc.Camera.MovementSpeed = cameraProps["MovementSpeed"].as<float>();
 					cc.Camera.RollSpeed = cameraProps["RollSpeed"].as<float>();
 					cc.Camera.MouseSensitivity = cameraProps["MouseSensitivity"].as<float>();
-					cc.Camera.Zoom = cameraProps["Zoom"].as<float>();
+					cc.Camera.Fov = cameraProps["Fov"].as<float>();
+					cc.Camera.Far = cameraProps["Far"].as<float>();
+					cc.Camera.Near = cameraProps["Near"].as<float>();
 
 					cc.Primary = cameraComponent["Primary"].as<bool>();
 				}

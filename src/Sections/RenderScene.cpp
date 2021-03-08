@@ -159,7 +159,7 @@ namespace Phoenix {
 		DrawComponent<CameraComponent>("Camera", entity, [](auto& component)
 			{
 				auto& camera = component.Camera;
-				std::cout << "  Camera::Matrix: " << glm::to_string(camera.GetViewMatrix()) << std::endl;
+				std::cout << "  Camera::ViewMatrix: " << glm::to_string(camera.getViewMatrix()) << std::endl;
 			});
 		
 		DrawComponent<MeshComponent>("Mesh", entity, [](auto& component)

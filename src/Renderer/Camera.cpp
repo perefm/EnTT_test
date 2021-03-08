@@ -17,6 +17,8 @@ namespace Phoenix {
 	const float Camera::DEFAULT_CAM_ROLL_SPEED = 40.0f;
 	const float Camera::DEFAULT_CAM_SENSITIVITY = 0.1f;
 	const float Camera::DEFAULT_CAM_VFOV = 45.0f;
+	const float Camera::DEFAULT_CAM_NEAR = 0.1f;
+	const float Camera::DEFAULT_CAM_FAR = 10000.0f;
 
 	Camera::Camera(glm::vec3 const& position, glm::vec3 const& up, float yaw, float pitch, float roll)
 	{
@@ -25,42 +27,66 @@ namespace Phoenix {
 		MovementSpeed = DEFAULT_CAM_SPEED;
 		RollSpeed = DEFAULT_CAM_ROLL_SPEED;
 		MouseSensitivity = DEFAULT_CAM_SENSITIVITY;
-		Zoom = DEFAULT_CAM_VFOV;
+		Fov = DEFAULT_CAM_VFOV;
 
 		Position = position;
 		WorldUp = up;
 		Yaw = yaw;
 		Pitch = pitch;
 		Roll = roll;
+
+		Near = DEFAULT_CAM_NEAR;
+		Far = DEFAULT_CAM_FAR;
+
 		updateCameraVectors();
 	}
 
-	void Camera::Reset()
+	void Camera::reset()
 	{
 		Front = glm::vec3(0.0f, 0.0f, -1.0f);
 		MovementSpeed = DEFAULT_CAM_SPEED;
 		MouseSensitivity = DEFAULT_CAM_SENSITIVITY;
-		Zoom = DEFAULT_CAM_VFOV;
+		Fov = DEFAULT_CAM_VFOV;
 
 		Position = glm::vec3(0.0f, 0.0f, 3.0f);
 		WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 		Yaw = DEFAULT_CAM_YAW;
 		Pitch = DEFAULT_CAM_PITCH;
 		Roll = DEFAULT_CAM_ROLL;
+
+		Near = DEFAULT_CAM_NEAR;
+		Far = DEFAULT_CAM_FAR;
+
 		updateCameraVectors();
 	}
 
-	glm::mat4 Camera::GetViewMatrix() const
+	glm::mat4 Camera::getViewMatrix() const
 	{
 		return glm::lookAt(Position, Position + Front, Up);
 	}
 
-	glm::mat4 Camera::GetMatrix() const
+	glm::mat4 Camera::getProjectionMatrix() const
+	{
+		return glm::perspective(glm::radians(Fov), 1.33f, Near, Far);
+		//return glm::perspective(glm::radians(Fov), GLDRV->GetFramebufferViewport().GetAspectRatio(), Near, Far);
+	}
+
+	glm::mat4 Camera::getOrthoProjectionMatrix() const
+	{
+		return glm::ortho(-1, 1, 1, -1, -1, 2);
+	}
+
+	glm::mat4 Camera::getOrthoViewMatrix() const
+	{
+		return glm::lookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	}
+
+	glm::mat4 Camera::getMatrix() const
 	{
 		return Matrix;
 	}
 
-	void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
+	void Camera::processKeyboard(CameraMovement direction, float deltaTime)
 	{
 		const float velocity = MovementSpeed * deltaTime;
 		const float velocity_roll = RollSpeed * deltaTime;
@@ -89,7 +115,7 @@ namespace Phoenix {
 		updateCameraVectors();
 	}
 
-	void Camera::ProcessMouseMovement(float xoffset, float yoffset, bool constrainPitch)
+	void Camera::processMouseMovement(float xoffset, float yoffset, bool constrainPitch)
 	{
 		xoffset *= MouseSensitivity;
 		yoffset *= MouseSensitivity;
@@ -110,35 +136,31 @@ namespace Phoenix {
 		updateCameraVectors();
 	}
 
-	void Camera::ProcessMouseScroll(float yoffset)
+	void Camera::processMouseScroll(float yoffset)
 	{
-		Zoom -= yoffset;
-		if (Zoom < 1.0f)
-			Zoom = 1.0f;
-		if (Zoom > 179.0f)
-			Zoom = 179.0f;
+		Fov -= yoffset;
+		if (Fov < 1.0f)
+			Fov = 1.0f;
+		if (Fov > 179.0f)
+			Fov = 179.0f;
 	}
 
-	void Camera::setCamera(glm::vec3 const& position, glm::vec3 const& up, float yaw, float pitch, float roll, float zoom)
+	// Captures Camera position and appends to a file called "camera.cam" (only works in debug mode)
+	void Camera::capturePos()
+	{
+	}
+
+	void Camera::setCamera(glm::vec3 const& position, glm::vec3 const& up, float yaw, float pitch, float roll, float fov)
 	{
 		Position = position;
 		WorldUp = up;
 		Yaw = yaw;
 		Pitch = pitch;
 		Roll = roll;
-		Zoom = zoom;
+		Fov = fov;
 		updateCameraVectors();
 	}
 
-	glm::mat4 Camera::getOrthoMatrix_Projection() const
-	{
-		return glm::ortho(-1, 1, 1, -1, -1, 2);
-	}
-
-	glm::mat4 Camera::getOrthoMatrix_View() const
-	{
-		return glm::lookAt(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	}
 
 	// Calculates the front vector from the Camera's (updated) Euler Angles
 	void Camera::setRollMatrix(glm::mat3x3& m, glm::vec3 f) {

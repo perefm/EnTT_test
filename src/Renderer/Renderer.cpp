@@ -37,7 +37,7 @@ namespace Phoenix {
 
 	void Renderer::BeginScene(Camera& camera)
 	{
-		s_SceneData->ViewProjectionMatrix = camera.GetViewMatrix();
+		s_SceneData->ViewProjectionMatrix = camera.getViewMatrix();
 	}
 
 	void Renderer::EndScene()
