@@ -10,6 +10,9 @@
 #include "Scene/SceneSerializer.h"
 #include "Sections/RenderScene.h"
 
+// TEMP
+#include <time.h>
+
 namespace Phoenix {
 
 	RenderScene::RenderScene()
@@ -46,29 +49,49 @@ namespace Phoenix {
 
 	void RenderScene::onExec(float time)
 	{
-		// Update some entities
-		auto view = m_activeScene->m_Registry.view<TransformComponent, MeshComponent, TagComponent>();
-		for (auto entity : view)
-		{
-			auto [transform, mesh, tag] = view.get<TransformComponent, MeshComponent, TagComponent>(entity);
-			if (tag.Tag == "Car mesh") {
-				transform.Translation += glm::vec3(1.0f, 0.0f, 0.0f);
-				std::cout << "Car mesh 'translation' increased by 1: " + glm::to_string(transform.Translation) << std::endl;
+		int updates = 100000;
+		clock_t t;
+		float secs = 0;
+
+		// Update some entities with "view"
+		t = clock();
+		for (int i = 0; i < updates; i++) {
+
+			auto view = m_activeScene->m_Registry.view<TransformComponent, MeshComponent, TagComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, tag] = view.get<TransformComponent, TagComponent>(entity); // Get only 2 of the 3 available components
+				if (tag.Tag == "Car mesh") {
+					transform.Translation += glm::vec3(1.0f, 0.0f, 0.0f);
+					//std::cout << "Car mesh 'translation' increased by 1: " + glm::to_string(transform.Translation) << std::endl;
+				}
 			}
 		}
-
-		/*
-		// Search for specific entity
-		auto group = m_activeScene->m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
-		for (auto entity : group)
-		{
-			auto [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
-			transform.Translation += glm::vec3(1.0f, 0.0f, 0.0f);
-			// Renderer::Submit(mesh, transform); // Example for a renderer
-		}
-		*/
-
+		t = clock() - t;
+		secs = (float)t / CLOCKS_PER_SEC;
+		std::cout << "Using 'views' it took " << secs << " seconds" << std::endl;
+			
 		
+		// Update some entities with "group"
+		t = clock();
+		for (int i = 0; i < updates; i++) {
+			// Search for specific entity
+			auto group = m_activeScene->m_Registry.group<TransformComponent>(entt::get<MeshComponent, TagComponent>);
+			for (auto entity : group)
+			{
+				auto [transform, tag] = group.get<TransformComponent, TagComponent>(entity);
+				if (tag.Tag == "Car mesh") {
+					transform.Translation += glm::vec3(1.0f, 0.0f, 0.0f);
+					//std::cout << "Car mesh 'translation' increased by 1: " + glm::to_string(transform.Translation) << std::endl;
+				}
+				// Renderer::Submit(mesh, transform); // Example for a renderer
+			}
+		}
+		t = clock() - t;
+		secs = (float)t / CLOCKS_PER_SEC;
+		std::cout << "Using 'groups' it took " << secs << " seconds" << std::endl;
+
+
 		std::cout << "New frame > RenderScene::onExec time: " + std::to_string(time) << std::endl;
 		m_activeScene->OnUpdate(time);
 	}
