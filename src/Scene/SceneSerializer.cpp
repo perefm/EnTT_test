@@ -164,7 +164,7 @@ namespace Phoenix {
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
-		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
+		out << YAML::Key << "Scene" << YAML::Value << m_Scene->Name;
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->m_Registry.each([&](auto entityID)
 		{
@@ -193,7 +193,7 @@ namespace Phoenix {
 		if (!data["Scene"])
 			return false;
 
-		std::string sceneName = data["Scene"].as<std::string>();
+		m_Scene->Name = data["Scene"].as<std::string>();
 		//HZ_CORE_TRACE("Deserializing scene '{0}'", sceneName);
 
 		auto entities = data["Entities"];

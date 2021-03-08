@@ -11,6 +11,9 @@ namespace Phoenix {
 	class Scene {
 
 	public:
+		std::string Name;
+
+	public:
 		Scene();
 		~Scene();
 

@@ -27,6 +27,7 @@ namespace Phoenix {
 	void RenderScene::onLoad()
 	{
 		m_activeScene = CreateRef<Scene>();
+		m_activeScene->Name = "Test Scene";
 
 		// Create Model Entity
 		auto actor = m_activeScene->createEntity("Actor mesh");
@@ -49,7 +50,7 @@ namespace Phoenix {
 
 	void RenderScene::onExec(float time)
 	{
-		int updates = 100000;
+		int updates = 10000;
 		clock_t t;
 		float secs = 0;
 
@@ -69,7 +70,7 @@ namespace Phoenix {
 		}
 		t = clock() - t;
 		secs = (float)t / CLOCKS_PER_SEC;
-		std::cout << "Using 'views' it took " << secs << " seconds" << std::endl;
+		std::cout << "Using 'views' it took " << secs << " seconds, to update " << updates << " components"<< std::endl;
 			
 		
 		// Update some entities with "group"
@@ -89,7 +90,7 @@ namespace Phoenix {
 		}
 		t = clock() - t;
 		secs = (float)t / CLOCKS_PER_SEC;
-		std::cout << "Using 'groups' it took " << secs << " seconds" << std::endl;
+		std::cout << "Using 'groups' it took " << secs << " seconds, to update " << updates << " components" << std::endl;
 
 
 		std::cout << "New frame > RenderScene::onExec time: " + std::to_string(time) << std::endl;

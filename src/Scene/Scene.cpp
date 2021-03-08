@@ -23,7 +23,8 @@ namespace Phoenix {
 		printf("Transform created!!!");
 	}
 
-	Scene::Scene()
+	Scene::Scene() :
+		Name("Undefined")
 	{
 	
 	}
