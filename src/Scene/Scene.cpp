@@ -76,7 +76,7 @@ namespace Phoenix {
 			{
 				auto [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
 
-				std::cout << "Call Render with mesh: " + mesh.Path + " at position: " + glm::to_string(transform.GetTransform()) << std::endl; // and now... access the components
+				std::cout << "Call Render with mesh: " + mesh.Path << std::endl; // and now... access the components
 				// Renderer::Submit(mesh, transform); // Example for a renderer
 			}
 

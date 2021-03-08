@@ -30,7 +30,7 @@ namespace Phoenix {
 
 		struct RenderSceneData
 		{
-			Entity someEntity;
+			std::string SceneName;
 		};
 
 		Scope<RenderSceneData> s_RenderSceneData;

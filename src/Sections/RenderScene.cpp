@@ -26,9 +26,9 @@ namespace Phoenix {
 		m_activeScene = CreateRef<Scene>();
 
 		// Create Model Entity
-		s_RenderSceneData->someEntity = m_activeScene->createEntity("Actor mesh");
+		auto actor = m_activeScene->createEntity("Actor mesh");
 		// Add some components to entity "modelA"
-		s_RenderSceneData->someEntity.AddComponent<MeshComponent>("/path_to_mesh/actor.gltf");
+		actor.AddComponent<MeshComponent>("/path_to_mesh/actor.gltf");
 
 		// Create another model Entity
 		auto car = m_activeScene->createEntity("Car mesh");
@@ -46,10 +46,29 @@ namespace Phoenix {
 
 	void RenderScene::onExec(float time)
 	{
-		// Update Entity
-		s_RenderSceneData->someEntity.GetComponent<TransformComponent>().Translation += glm::vec3(1.0f, 0.0f, 0.0f);
+		// Update some entities
+		auto view = m_activeScene->m_Registry.view<TransformComponent, MeshComponent, TagComponent>();
+		for (auto entity : view)
+		{
+			auto [transform, mesh, tag] = view.get<TransformComponent, MeshComponent, TagComponent>(entity);
+			if (tag.Tag == "Car mesh") {
+				transform.Translation += glm::vec3(1.0f, 0.0f, 0.0f);
+				std::cout << "Car mesh 'translation' increased by 1: " + glm::to_string(transform.Translation) << std::endl;
+			}
+		}
 
+		/*
+		// Search for specific entity
+		auto group = m_activeScene->m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, mesh] = group.get<TransformComponent, MeshComponent>(entity);
+			transform.Translation += glm::vec3(1.0f, 0.0f, 0.0f);
+			// Renderer::Submit(mesh, transform); // Example for a renderer
+		}
+		*/
 
+		
 		std::cout << "New frame > RenderScene::onExec time: " + std::to_string(time) << std::endl;
 		m_activeScene->OnUpdate(time);
 	}
